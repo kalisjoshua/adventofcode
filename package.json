@@ -1,0 +1,16 @@
+{
+  "name": "adventofcode",
+  "version": "0.1.0",
+  "description": "",
+  "main": "day-01.js",
+  "scripts": {
+    "start": "jest --watchAll",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Joshua T Kalis <kalisjoshua@gmail.com> (http://kalisjoshua.me)",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^24.9.0"
+  }
+}

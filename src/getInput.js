@@ -1,8 +1,8 @@
 const fs = require("fs")
 const path = require("path")
 
-function getInput (day, file = "input") {
-  const input = path.join(process.cwd(), "src", day, file)
+function getInput (day) {
+  const input = path.join(process.cwd(), "src", day)
 
   return fs.readFileSync(input, "utf8")
 }

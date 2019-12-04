@@ -1,4 +1,4 @@
-const input = require("../getInput")("day02")
+const input = require("./getInput")("day02")
   .match(/\d+/g)
 
 input[1] = "12"
@@ -32,4 +32,5 @@ while (true) {
   }
 }
 
-module.exports = input[0]
+// eslint-disable-next-line no-console
+console.log(input[0])

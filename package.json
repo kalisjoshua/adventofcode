@@ -2,15 +2,14 @@
   "name": "adventofcode",
   "version": "0.1.0",
   "description": "",
-  "main": "day-01.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "jest --watchAll",
-    "test": "jest"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "Joshua T Kalis <kalisjoshua@gmail.com> (http://kalisjoshua.me)",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^24.9.0"
+    "chokidar": "^3.3.0"
   }
 }

@@ -1,4 +1,4 @@
-const input = require("../getInput")("day01")
+const input = require("./getInput")("day01")
   .match(/\d+/g)
 
 function fuel (mass) {
@@ -11,4 +11,5 @@ const result = input
   .map(fuel)
   .reduce((a, x) => a + x)
 
-module.exports = result
+// eslint-disable-next-line no-console
+console.log(result)

@@ -1,5 +1,4 @@
-import raw from "./input"
-const input = raw
+const input = require("../getInput")("day02")
   .match(/\d+/g)
 
 input[1] = "12"
@@ -33,4 +32,4 @@ while (true) {
   }
 }
 
-export default input[0]
+module.exports = input[0]

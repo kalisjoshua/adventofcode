@@ -1,5 +1,4 @@
-import raw from "./input"
-const input = raw
+const input = require("../getInput")("day01")
   .match(/\d+/g)
 
 function fuel (mass) {
@@ -12,4 +11,4 @@ const result = input
   .map(fuel)
   .reduce((a, x) => a + x)
 
-export default result
+module.exports = result

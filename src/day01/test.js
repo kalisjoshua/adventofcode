@@ -1,4 +1,4 @@
-import day from "./index"
+const day = require("./solution")
 
 describe("Day 1", () => {
   it("should return 5119312", () => {

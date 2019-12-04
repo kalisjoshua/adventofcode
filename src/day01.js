@@ -1,4 +1,4 @@
-const input = require("./getInput")("day01")
+const input = process.argv[2]
   .match(/\d+/g)
 
 function fuel (mass) {

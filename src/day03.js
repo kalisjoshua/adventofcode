@@ -1,22 +1,17 @@
-const input = process.argv[2]
-  .trim()
-  .split("\n")
+const trace = require("../trace")
+
+const input = {
+  410: `R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
+        U98,R91,D20,R16,D67,R40,U7,R15,U6,R7`.split(/\n/).map((s) => s.trim()),
+  610: `R75,D30,R83,U83,L12,D49,R71,U7,L72
+        U62,R66,U55,R34,D71,R55,D58,R83`.split(/\n/).map((s) => s.trim()),
+  full: process.argv[2]
+    .trim()
+    .split("\n")
+}
 
 const createArray = (len) =>
   Array.apply(0, new Array(+len)).map((_, i) => i + 1)
-
-const trace = (function () {
-  let last = new Date()
-
-  return (s) => {
-    const time = ((new Date()) - last).toString().padStart(6, " ")
-
-    last = new Date()
-
-    // eslint-disable-next-line no-console
-    console.log(`${s.padEnd(14, " ")} ${time} ms elapsed`)
-  }
-}())
 
 const op = {
   D: ([x, y]) => (movement) => [x, y - movement],
@@ -47,7 +42,7 @@ function wire (start, command) {
 
 trace("Begin")
 
-const wires = input
+const wires = input["full"]
   .reduce(walk, [])
   // convert points notation from array ([x, y]) to string ("x,y")
   .reduce((a, g) => [...a, g.slice(1).map((p) => p.join())], [])
@@ -65,5 +60,16 @@ const distances = intersections
 
 trace("Distances")
 
+const shortestPath = intersections
+  .map((point) => wires.map((w) => w.indexOf(point)).reduce((a, b) => +a + +b))
+  .sort((a, b) => a - b)
+  // plus two because; 1) it's an index, and 2) it doesn't count the origin
+  .shift() + 2
+
+trace("Shortest")
+
 // eslint-disable-next-line no-console
-console.log(Math.min.apply(Math, distances))
+console.log("Nearest intersection to origin", Math.min.apply(Math, distances))
+
+// eslint-disable-next-line no-console
+console.log("Nearest intersection along path", shortestPath)

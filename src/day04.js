@@ -8,7 +8,7 @@ const options = []
 const alwaysIncreasing = (num) =>
   num == num.toString().split("").sort().join("")
 const properSequence = (num) =>
-  (num.toString().match(/(\d)\1+/g) || []).map((s) => s.length).join("").includes(2)
+  (num.toString().match(/(\d)\1+/g) || []).some((s) => s.length === 2)
 
 do {
   if (properSequence(min) && alwaysIncreasing(min)) options.push(min)

@@ -1,3 +1,4 @@
+delete require.cache[require("path").join(process.cwd(), "lib/computor.js")]
 const computor = require("../lib/computor")
 
 const input = process.argv[2]

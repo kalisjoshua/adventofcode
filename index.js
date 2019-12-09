@@ -6,7 +6,7 @@ const {readFileSync} = require("fs")
 const clear = () => console.clear()
 // eslint-disable-next-line no-console
 const log = console.log.bind(console)
-const rDay = /(day\d\d)\.js/
+const rDay = /src\/day\d\d\.js/g
 
 function execHandler (error, stdout, stderr) {
   if (error || stderr) {
@@ -18,20 +18,31 @@ function execHandler (error, stdout, stderr) {
 }
 
 function onChange (file) {
+  const dep = readFileSync(file, "utf8")
+    .split("\n")[0]
+    .match(rDay)
+
   if (rDay.test(file)) {
-    clear()
-
-    const absPath = join(process.cwd(), file)
-    const input = readFileSync(absPath.replace(".js", ""), "utf8")
-
-    log(absPath.match(rDay)[1])
-
-    execFile("node", [absPath, input], execHandler)
+    runner(file)
+  } else if (dep.length) {
+    runner(dep.pop())
   }
 }
 
+function runner (file) {
+  const absPath = join(process.cwd(), file)
+  const input = readFileSync(absPath.replace(".js", ""), "utf8")
+
+  clear()
+  log(Array(30).join("~"))
+  log(file, Math.random().toString(36).slice(2,6))
+  log(Array(30).join("~"))
+
+  execFile("node", [absPath, input], execHandler)
+}
+
 require('chokidar')
-  .watch('./src')
+  .watch(["./lib", "./src"])
   .on('change', onChange)
 
 clear()

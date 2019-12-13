@@ -2,7 +2,7 @@ delete require.cache[require("path").join(process.cwd(), "lib/computor.js")]
 const computor = require("../lib/computor")
 
 const input = process.argv[2]
-  .match(/\d+/g)
+  .match(/-?\d+/g)
 
 let noun = 12
 let verb = 2

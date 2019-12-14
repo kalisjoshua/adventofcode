@@ -31,7 +31,7 @@ function onChange (file) {
 
 function runner (file) {
   const absPath = join(process.cwd(), file)
-  const input = readFileSync(absPath.replace(".js", ""), "utf8")
+  const input = readFileSync(absPath.replace(".js", "").replace("src", "input"), "utf8")
 
   clear()
   log(Array(30).join("~"))

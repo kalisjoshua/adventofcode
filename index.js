@@ -9,11 +9,11 @@ const log = console.log.bind(console)
 const rDay = /src\/day\d\d\.js/g
 
 function execHandler (error, stdout, stderr) {
+  log(stdout.trim())
+
   if (error || stderr) {
     log("There could be a problem here...")
-    log(error || stderr)
-  } else {
-    log(stdout.trim())
+    log(stderr)
   }
 }
 

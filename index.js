@@ -2,6 +2,8 @@ const {execFile} = require("child_process")
 const {join} = require("path")
 const {readFileSync} = require("fs")
 
+const limpid = require("./lib/limpid")
+
 // eslint-disable-next-line no-console
 const clear = () => console.clear()
 // eslint-disable-next-line no-console
@@ -13,7 +15,8 @@ function execHandler (error, stdout, stderr) {
 
   if (error || stderr) {
     log("There could be a problem here...")
-    log(stderr)
+    delete error.cmd
+    log(error)
   }
 }
 
@@ -35,7 +38,7 @@ function runner (file) {
 
   clear()
   log(Array(30).join("~"))
-  log(file, Math.random().toString(36).slice(2,6))
+  log(file, limpid())
   log(Array(30).join("~"))
 
   execFile("node", [absPath, input], execHandler)

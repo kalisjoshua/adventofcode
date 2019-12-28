@@ -1,3 +1,4 @@
+const range = require("../lib/range")
 const trace = require("../lib/trace")
 
 const input = {
@@ -9,9 +10,6 @@ const input = {
     .trim()
     .split("\n")
 }
-
-const createArray = (len) =>
-  Array.apply(0, new Array(+len)).map((_, i) => i + 1)
 
 const op = {
   D: ([x, y]) => (movement) => [x, y - movement],
@@ -36,7 +34,7 @@ function wire (start, command) {
     .match(/^([dlru])(\d+)$/i)
     .slice(1)
 
-  return createArray(length)
+  return range(length)
     .map(op[direction.toUpperCase()](start.map(Number)))
 }
 

@@ -1,5 +1,4 @@
-delete require.cache[require("path").join(process.cwd(), "lib/computor.js")]
-const computor = require("../lib/computor")
+const computor = require("../lib/reload.js")("../lib/computor.js")
 
 const input = process.argv[2]
   .match(/-?\d+/g)
@@ -8,7 +7,10 @@ let noun = 12
 let verb = 2
 const target = 19690720
 
-const fixInput = (input, n, v) => {
+// eslint-disable-next-line no-console
+const log = (...args) => console.log(...args)
+
+function fixInput (input, n, v) {
   const changed = input.slice(0)
 
   changed[1] = n
@@ -17,9 +19,14 @@ const fixInput = (input, n, v) => {
   return changed
 }
 
-while (target > computor(fixInput(input, ++noun, verb)));
---noun
-while (target > computor(fixInput(input, noun, ++verb)));
+while (computor(null, fixInput(input, ++noun, verb))[0] < target);
+noun--
+while (computor(null, fixInput(input, noun, ++verb))[0] < target);
 
-// eslint-disable-next-line no-console
-console.log(100 * noun + verb)
+const result = 100 * noun + verb
+
+if (result == 5121) {
+  log("Program completed succesfully.", result)
+} else {
+  log("FAIL!", result)
+}

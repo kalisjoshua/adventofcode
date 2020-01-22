@@ -19,9 +19,9 @@ function fixInput (input, n, v) {
   return changed
 }
 
-while (computor(fixInput(input, ++noun, verb)).memory[0] < target);
+while (computor(fixInput(input, ++noun, verb)).program[0] < target);
 noun--
-while (computor(fixInput(input, noun, ++verb)).memory[0] < target);
+while (computor(fixInput(input, noun, ++verb)).program[0] < target);
 
 const result = 100 * noun + verb
 

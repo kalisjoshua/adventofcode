@@ -1,52 +1,52 @@
-const {execFile} = require("child_process")
-const {join} = require("path")
-const {readFileSync} = require("fs")
+const cp = require("child_process")
+const fs = require("fs")
+const path = require("path")
 
 const limpid = require("./lib/limpid")
 
+const pwd = process.cwd()
+
 // eslint-disable-next-line no-console
-const clear = () => console.clear()
-// eslint-disable-next-line no-console
-const log = console.log.bind(console)
-const rDay = /src\/day\d\d\.js/g
+const log = (...args) => console.log(...args)
 
-function execHandler (error, stdout, stderr) {
-  log(stdout.trim())
+const input = (day) => fs.readFileSync(path.join(pwd, "input", day), "utf-8")
+const src = (day) => path.join(pwd, "src", day + ".js")
 
-  if (error || stderr) {
-    log("There could be a problem here...")
-    delete error.cmd
-    log(error)
+function runner (files, filter) {
+  // eslint-disable-next-line no-console
+  console.clear()
+
+  const filesToRun = filter
+    ? files.filter((file) => (new RegExp(filter)).test(fs.readFileSync(path.join(pwd, "src", file), "utf8")))
+    : files
+
+  if (!filesToRun.length) {
+    log(Array(30).join("!"))
+    log("No dependent files.", filter)
+    log(Array(30).join("!"))
+
+    return
   }
+
+  filesToRun
+    .map((file) => {
+      const day = file.match(/day\d\d/)[0]
+
+      log(Array(30).join("="))
+      files.length > 1 ? log(day) : log(day, "-", limpid())
+      log(Array(30).join("-"))
+
+      try {
+        log(cp.execFileSync("node", [src(day), input(day).trim()]).toString())
+      } catch (error) {
+        log("There could be a problem here...")
+        delete error.cmd
+        log(error)
+      }
+    })
 }
 
-function onChange (file) {
-  const dep = readFileSync(file, "utf8")
-    .split("\n")[0]
-    .match(rDay)
+fs.watch("./lib", (_, file) => runner(fs.readdirSync("./src"), `lib/${file.replace(".js", "")}`))
+fs.watch("./src", (_, file) => runner([file]))
 
-  if (rDay.test(file)) {
-    runner(file)
-  } else if (dep.length) {
-    runner(dep.pop())
-  }
-}
-
-function runner (file) {
-  const absPath = join(process.cwd(), file)
-  const input = readFileSync(absPath.replace(".js", "").replace("src", "input"), "utf8")
-
-  clear()
-  log(Array(30).join("~"))
-  log(file, limpid())
-  log(Array(30).join("~"))
-
-  execFile("node", [absPath, input], execHandler)
-}
-
-require('chokidar')
-  .watch(["./lib", "./src"])
-  .on('change', onChange)
-
-clear()
-log("Waiting for change")
+runner(fs.readdirSync("./src"))

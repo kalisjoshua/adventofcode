@@ -9,7 +9,5 @@
   "keywords": [],
   "author": "Joshua T Kalis <kalisjoshua@gmail.com> (http://kalisjoshua.me)",
   "license": "MIT",
-  "devDependencies": {
-    "chokidar": "^3.3.0"
-  }
+  "devDependencies": {}
 }

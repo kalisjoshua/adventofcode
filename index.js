@@ -40,8 +40,6 @@ function runner (files, filter) {
         log(cp.execFileSync("node", [src(day), input(day).trim()]).toString())
       } catch (error) {
         log("There could be a problem here...")
-        delete error.cmd
-        log(error)
       }
     })
 }

@@ -1,5 +1,5 @@
-const computor = require("../lib/reload.js")("../lib/computor.js")
-// const pipeline = require("../lib/pipeline")
+delete require.cache["../computor.js"]
+const computor = require("../computor.js")
 
 // eslint-disable-next-line no-console
 const log = (...args) => console.log(...args)

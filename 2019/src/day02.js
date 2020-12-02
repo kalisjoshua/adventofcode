@@ -1,4 +1,5 @@
-const computor = require("../lib/reload.js")("../lib/computor.js")
+delete require.cache["../computor.js"]
+const computor = require("../computor.js")
 
 const input = process.argv[2]
   .match(/-?\d+/g)

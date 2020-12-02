@@ -1,7 +1,9 @@
-const computor = require("../lib/reload.js")("../lib/computor.js")
-const permute = require("../lib/permute")
-const pipeline = require("../lib/pipeline")
-const range = require("../lib/range")
+delete require.cache["../computor.js"]
+const computor = require("../computor.js")
+
+const permute = require("../../lib/permute")
+const pipeline = require("../../lib/pipeline")
+const range = require("../../lib/range")
 
 // eslint-disable-next-line no-console
 const log = (...args) => console.log(...args)

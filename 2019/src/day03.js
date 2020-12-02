@@ -1,5 +1,5 @@
-const range = require("../lib/range")
-const trace = require("../lib/trace")
+const range = require("../../lib/range")
+const trace = require("../../lib/trace")
 
 const input = {
   410: `R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51

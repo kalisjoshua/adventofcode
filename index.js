@@ -4,13 +4,14 @@ const path = require("path")
 
 const limpid = require("./lib/limpid")
 
-const pwd = process.cwd()
+const [year] = process.argv.slice(2) || 2019
+const pwd = path.join(process.cwd(), year)
 
 // eslint-disable-next-line no-console
 const log = (...args) => console.log(...args)
 
 const input = (day) => fs.readFileSync(path.join(pwd, "input", day), "utf-8")
-const src = (day) => path.join(pwd, "src", day + ".js")
+const src = (day) => path.join(pwd, "src", day ? day + ".js" : "")
 
 function runner (files, filter) {
   // eslint-disable-next-line no-console
@@ -40,11 +41,12 @@ function runner (files, filter) {
         log(cp.execFileSync("node", [src(day), input(day).trim()]).toString())
       } catch (error) {
         log("There could be a problem here...")
+        log(error)
       }
     })
 }
 
-fs.watch("./lib", (_, file) => runner(fs.readdirSync("./src"), `lib/${file.replace(".js", "")}`))
-fs.watch("./src", (_, file) => runner([file]))
+fs.watch("./lib", (_, file) => runner(fs.readdirSync(src()), `lib/${file.replace(".js", "")}`))
+fs.watch(src(), (_, file) => runner([file]))
 
-runner(fs.readdirSync("./src"))
+runner(fs.readdirSync(src()))

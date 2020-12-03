@@ -1,52 +1,56 @@
-const cp = require("child_process")
-const fs = require("fs")
-const path = require("path")
+const fs = require('fs')
+const path = require('path')
 
-const limpid = require("./lib/limpid")
+const bars = ['=', '-'].map((str) => Array(36).join(str))
+const dayPattern = /^day\d\d\.js$/
+const dependencies = {}
+const lib = path.resolve('lib')
+const src = path.resolve(`${process.argv[2] || 2019}`)
 
-const [year] = process.argv.slice(2) || 2019
-const pwd = path.join(process.cwd(), year)
+const getSourceFileList = () => fs.readdirSync(src)
+  .filter((file) => dayPattern.test(file))
+const readInput = (name) => fs
+  .readFileSync(path.resolve(src, name + '.input'), 'utf8')
+  .trim()
 
-// eslint-disable-next-line no-console
-const log = (...args) => console.log(...args)
+function reload (file) {
+  const rel = path.resolve(lib, file)
 
-const input = (day) => fs.readFileSync(path.join(pwd, "input", day), "utf-8")
-const src = (day) => path.join(pwd, "src", day ? day + ".js" : "")
+  delete require.cache[rel]
+  dependencies[path.parse(file).name] = require(rel)
+}
 
-function runner (files, filter) {
+function runner (files, isDependency = false) {
   // eslint-disable-next-line no-console
   console.clear()
 
-  const filesToRun = filter
-    ? files.filter((file) => (new RegExp(filter)).test(fs.readFileSync(path.join(pwd, "src", file), "utf8")))
-    : files
-
-  if (!filesToRun.length) {
-    log(Array(30).join("!"))
-    log("No dependent files.", filter)
-    log(Array(30).join("!"))
-
-    return
+  if (isDependency) {
+    reload(files[0])
   }
 
+  const filesToRun = isDependency || !dayPattern.test(files[0])
+    ? getSourceFileList()
+    : files
+
   filesToRun
-    .map((file) => {
-      const day = file.match(/day\d\d/)[0]
+    .forEach((file) => {
+      const {name} = path.parse(file)
+      const rel = path.resolve(src, file)
 
-      log(Array(30).join("="))
-      files.length > 1 ? log(day) : log(day, "-", limpid())
-      log(Array(30).join("-"))
+      dependencies.log(bars[0])
+      dependencies.log(name, '-', dependencies.limpid())
+      dependencies.log(bars[1])
 
-      try {
-        log(cp.execFileSync("node", [src(day), input(day).trim()]).toString())
-      } catch (error) {
-        log("There could be a problem here...")
-        log(error)
-      }
+      delete require.cache[rel]
+      require(rel)(readInput(name), dependencies)
+
+      dependencies.log()
     })
 }
 
-fs.watch("./lib", (_, file) => runner(fs.readdirSync(src()), `lib/${file.replace(".js", "")}`))
-fs.watch(src(), (_, file) => runner([file]))
+fs.readdirSync(lib).forEach(reload)
 
-runner(fs.readdirSync(src()))
+fs.watch(lib, (event, file) => runner([file], true))
+fs.watch(src, (event, file) => runner([file]))
+
+runner(getSourceFileList())

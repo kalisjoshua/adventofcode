@@ -18,6 +18,10 @@ function reload (...args) {
 
   delete require.cache[rel]
 
+  if (args[0] === lib) {
+    dependencies[path.parse(rel).name] = require(rel)
+  }
+
   return require(rel)
 }
 
@@ -53,9 +57,7 @@ function runner (files, isDependency = false) {
 }
 
 fs.readdirSync(lib)
-  .forEach((file) => {
-    dependencies[path.parse(file).name] = reload(lib, file)
-  })
+  .forEach((file) => reload(lib, file))
 
 fs.watch(lib, (event, file) => runner([file], true))
 fs.watch(src, (event, file) => runner([file]))

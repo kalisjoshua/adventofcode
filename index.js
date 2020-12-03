@@ -13,11 +13,12 @@ const readInput = (name) => fs
   .readFileSync(path.resolve(src, name + '.input'), 'utf8')
   .trim()
 
-function reload (file) {
-  const rel = path.resolve(lib, file)
+function reload (...args) {
+  const rel = path.resolve(...args)
 
   delete require.cache[rel]
-  dependencies[path.parse(file).name] = require(rel)
+
+  return require(rel)
 }
 
 function runner (files, isDependency = false) {
@@ -25,7 +26,7 @@ function runner (files, isDependency = false) {
   console.clear()
 
   if (isDependency) {
-    reload(files[0])
+    reload(lib, files[0])
   }
 
   const filesToRun = isDependency || !dayPattern.test(files[0])
@@ -35,20 +36,26 @@ function runner (files, isDependency = false) {
   filesToRun
     .forEach((file) => {
       const {name} = path.parse(file)
-      const rel = path.resolve(src, file)
 
       dependencies.log(bars[0])
       dependencies.log(name, '-', dependencies.limpid())
       dependencies.log(bars[1])
 
-      delete require.cache[rel]
-      require(rel)(readInput(name), dependencies)
+      try {
+        reload(src, file)(readInput(name), dependencies)
+      } catch (e) {
+        dependencies.log("Whooops, something didn't go right.")
+        dependencies.log(e)
+      }
 
       dependencies.log()
     })
 }
 
-fs.readdirSync(lib).forEach(reload)
+fs.readdirSync(lib)
+  .forEach((file) => {
+    dependencies[path.parse(file).name] = reload(lib, file)
+  })
 
 fs.watch(lib, (event, file) => runner([file], true))
 fs.watch(src, (event, file) => runner([file]))

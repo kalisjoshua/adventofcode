@@ -48,8 +48,8 @@ function runner (files, isDependency = false) {
       try {
         reload(src, file)(readInput(name), dependencies)
       } catch (e) {
-        dependencies.log("Whooops, something didn't go right.")
-        dependencies.log(e)
+        dependencies.log.warn("Whooops, something didn't go right.")
+        dependencies.log.error(e)
       }
 
       dependencies.log()

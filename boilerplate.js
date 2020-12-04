@@ -1,18 +1,19 @@
 function main (input, {report}) {
-  // input = input
+  input = input
+    .split(/\n/)
 
   partOne(input, (...args) => report('Part one', ...args))
-  // partTwo(input, (...args) => report('Part two', ...args))
+  partTwo(input, (...args) => report('Part two', ...args))
 }
 
 function partOne (input, report) {
 
-  // report(result, )
+  // report(result)
 }
 
 function partTwo (input, report) {
 
-  // report(result, )
+  // report(result)
 }
 
 module.exports = main

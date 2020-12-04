@@ -24,8 +24,21 @@ function partOne (input, report) {
 }
 
 function partTwo (input, report) {
+  const operations = {
+    'on': (brightness) => brightness + 1,
+    'off': (brightness) => Math.max(brightness - 1, 0),
+    'toggle': (brightness) => brightness + 2,
+  }
 
-  // report(result)
+  const grid = turnOnTheLights(input, operations)
+
+  const sum = (a, b) => a + b
+
+  const result = grid
+    .map((row) => row.reduce(sum))
+    .reduce(sum)
+
+  report(result, 14110788)
 }
 
 function turnOnTheLights (input, operations, size = 1000) {

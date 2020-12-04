@@ -1,11 +1,13 @@
-function main (input, {report}) {
+function main (input, libs) {
   input = input
     .trim()
     .split(/\n/)
     .map((str) => str.split('x').map(Number))
 
-  partOne(input, (...args) => report('Part one', ...args))
-  partTwo(input, (...args) => report('Part two', ...args))
+  main.libs = libs
+
+  partOne(input, (...args) => libs.report('Part one', ...args))
+  partTwo(input, (...args) => libs.report('Part two', ...args))
 }
 
 function partOne (input, report) {

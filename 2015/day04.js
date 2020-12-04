@@ -7,9 +7,13 @@ const md5 = (str) => crypto
   .update(str)
   .digest('hex')
 
-function main (input, {report}) {
-  partOne(input, (...args) => report('Part one', ...args))
-  partTwo(input, (...args) => report('Part two', ...args))
+function main (input, libs) {
+  // input = input
+
+  main.libs = libs
+
+  partOne(input, (...args) => libs.report('Part one', ...args))
+  partTwo(input, (...args) => libs.report('Part two', ...args))
 }
 
 function partOne (input, report) {

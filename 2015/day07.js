@@ -1,5 +1,6 @@
 function main (input, libs) {
-  // input = input
+  input = input
+    .split(/\n/)
 
   main.libs = libs
 

@@ -68,7 +68,7 @@ function partTwo (input, report) {
     })
     .length
 
-  report(result)
+  report(result, 121)
 }
 
 function validateHeight (hgt) {

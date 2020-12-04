@@ -1,16 +1,21 @@
 const fs = require('fs')
 const path = require('path')
 
-const bars = ['=', '-'].map((str) => Array(36).join(str))
+const allYears = fs.readdirSync('.')
+  .filter((file) => file.match(/^\d{4}$/))
+const bars = ['=', '-']
+  .map((str) => Array(36).join(str))
+const currentYear = process.argv[2] || allYears.slice(-1)[0]
 const dayPattern = /^day\d\d\.js$/
 const dependencies = {}
 const lib = path.resolve('lib')
-const src = path.resolve(`${process.argv[2] || 2019}`)
+const src = path.resolve(currentYear)
 
-const getSourceFileList = () => fs.readdirSync(src)
+const getSourceFileList = (dir = src) => fs.readdirSync(dir)
   .filter((file) => dayPattern.test(file))
-const readInput = (name) => fs
-  .readFileSync(path.resolve(src, name + '.input'), 'utf8')
+const requiredArg = () => {throw new Error('')}
+const readInput = (dir = src, name = requiredArg()) => fs
+  .readFileSync(path.resolve(dir, name + '.input'), 'utf8')
   .trim()
 
 function reload (...args) {
@@ -25,16 +30,18 @@ function reload (...args) {
   return require(rel)
 }
 
-function runner (files, isDependency = false) {
+function runner (dir, files, isDependency = false) {
   // eslint-disable-next-line no-console
   console.clear()
+
+  const [year] = dir.match(/\d{4}$/)
 
   if (isDependency) {
     reload(lib, files[0])
   }
 
   const filesToRun = isDependency || !dayPattern.test(files[0])
-    ? getSourceFileList()
+    ? getSourceFileList(dir)
     : files
 
   filesToRun
@@ -42,11 +49,11 @@ function runner (files, isDependency = false) {
       const {name} = path.parse(file)
 
       dependencies.log(bars[0])
-      dependencies.log(name, '-', dependencies.limpid())
+      dependencies.log(year, '/', name, '-', dependencies.limpid())
       dependencies.log(bars[1])
 
       try {
-        reload(src, file)(readInput(name), dependencies)
+        reload(dir, file)(readInput(dir, name), dependencies)
       } catch (e) {
         dependencies.log.warn("Whooops, something didn't go right.")
         dependencies.log.error(e)
@@ -59,7 +66,13 @@ function runner (files, isDependency = false) {
 fs.readdirSync(lib)
   .forEach((file) => reload(lib, file))
 
-fs.watch(lib, (event, file) => runner([file], true))
-fs.watch(src, (event, file) => runner([file]))
+fs.watch(lib, (event, file) => runner(lib, [file], true))
 
-runner(getSourceFileList())
+allYears
+  .forEach((year) => {
+    const dir = path.resolve(year)
+
+    fs.watch(dir, (event, file) => runner(dir, [file]))
+  })
+
+runner(src, getSourceFileList())

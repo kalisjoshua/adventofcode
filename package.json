@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js 2020"
+    "2015": "node index.js 2015",
+    "2019": "node index.js 2019",
+    "2020": "node index.js 2020",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "Joshua T Kalis <kalisjoshua@gmail.com> (http://kalisjoshua.me)",

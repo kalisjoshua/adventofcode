@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "2015": "node index.js 2015",
-    "2019": "node index.js 2019",
-    "2020": "node index.js 2020",
+    "2015": "npm start -- 2015",
+    "2019": "npm start -- 2019",
+    "2020": "npm start -- 2020",
     "lint": "eslint .",
     "start": "node index.js"
   },

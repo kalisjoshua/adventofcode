@@ -8,15 +8,15 @@ function main (input, libs) {
 }
 
 function partOne (input, report) {
-  const result = input
+  // const result = input
 
-  report(result)
+  report('Let the fun begin')
 }
 
 function partTwo (input, report) {
-  const result = input
+  // const result = input
 
-  report(result)
+  report('Let the fun begin')
 }
 
 module.exports = main

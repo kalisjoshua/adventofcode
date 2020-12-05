@@ -39,7 +39,6 @@ function partTwo (input, report) {
     })
     .length
 
-
   report(result, 634)
 }
 

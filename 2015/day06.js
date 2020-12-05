@@ -10,9 +10,9 @@ function main (input, libs) {
 
 function partOne (input, report) {
   const operations = {
-    'on': () => 1,
-    'off': () => 0,
-    'toggle': (arg) => !arg,
+    on: () => 1,
+    off: () => 0,
+    toggle: (arg) => !arg,
   }
 
   const grid = turnOnTheLights(input, operations)
@@ -25,9 +25,9 @@ function partOne (input, report) {
 
 function partTwo (input, report) {
   const operations = {
-    'on': (brightness) => brightness + 1,
-    'off': (brightness) => Math.max(brightness - 1, 0),
-    'toggle': (brightness) => brightness + 2,
+    on: (brightness) => brightness + 1,
+    off: (brightness) => Math.max(brightness - 1, 0),
+    toggle: (brightness) => brightness + 2,
   }
 
   const grid = turnOnTheLights(input, operations)
@@ -53,10 +53,10 @@ function turnOnTheLights (input, operations, size = 1000) {
 
       while (col <= y2) {
         grid[row][col] = operations[op](grid[row][col])
-        col++
+        col += 1
       }
 
-      row++
+      row += 1
     }
   }
 

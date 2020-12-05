@@ -7,10 +7,15 @@
     "2015": "node index.js 2015",
     "2019": "node index.js 2019",
     "2020": "node index.js 2020",
+    "lint": "eslint .",
     "start": "node index.js"
   },
   "keywords": [],
   "author": "Joshua T Kalis <kalisjoshua@gmail.com> (http://kalisjoshua.me)",
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
 }

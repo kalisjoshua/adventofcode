@@ -4,12 +4,26 @@
       "jest": true,
       "node": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+      "eslint:recommended",
+      "eslint-config-airbnb-base",
+    ],
     "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-          "impliedStrict": true
-        }
+      "ecmaVersion": 9,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "experimentalObjectRestSpread": true,
+        "impliedStrict": true
+      }
+    },
+    "rules": {
+      "block-spacing": ["error", "never"],
+      "newline-before-return": ["error"],
+      "no-param-reassign": ["off"],
+      "no-use-before-define": ["error", {"functions": false}],
+      "object-curly-spacing": ["error", "never"],
+      "object-curly-newline": ["error", {"multiline": true}],
+      "semi": ["error", "never"],
+      "space-before-function-paren": ["error", "always"],
     },
 }

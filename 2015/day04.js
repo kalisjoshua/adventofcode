@@ -21,7 +21,8 @@ function partOne (input, report) {
   let result = 346385
 
   do {
-    hash = md5(`${input}${result++}`)
+    hash = md5(`${input}${result}`)
+    result += 1
   } while (result < LIMIT && !hash.startsWith('00000'))
 
   report(result, 346386)
@@ -32,7 +33,8 @@ function partTwo (input, report) {
   let result = 9958217
 
   do {
-    hash = md5(`${input}${result++}`)
+    hash = md5(`${input}${result}`)
+    result += 1
   } while (result < LIMIT && !hash.startsWith('000000'))
 
   report(result, 9958218)

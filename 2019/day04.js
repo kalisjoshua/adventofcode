@@ -1,8 +1,7 @@
 function main (input, {report}) {
   input = input
-    .split("-")
+    .split('-')
 
-  // partOne(input, (...args) => report('Part one', ...args))
   partTwo(input, (...args) => report('Part two', ...args))
 }
 
@@ -10,13 +9,15 @@ function partTwo (input, report) {
   let [min] = input
   const options = []
 
-  const alwaysIncreasing = (num) =>
-    num == num.toString().split("").sort().join("")
-  const properSequence = (num) =>
-    (num.toString().match(/(\d)\1+/g) || []).some((s) => s.length === 2)
+  const alwaysIncreasing = (num) => num === parseInt(num.toString().split('').sort().join(''), 10)
+  const properSequence = (num) => (num.toString().match(/(\d)\1+/g) || [])
+    .some((s) => s.length === 2)
 
   do {
-    if (properSequence(min) && alwaysIncreasing(min)) options.push(min)
+    if (properSequence(min) && alwaysIncreasing(min)) {
+      options.push(min)
+    }
+  // eslint-disable-next-line no-plusplus
   } while (++min < input[1])
 
   report(options.length, 1411)

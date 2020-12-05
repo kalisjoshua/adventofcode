@@ -21,8 +21,8 @@ function partOne (input, report) {
 
 function partTwo (input, report) {
   const result = input
-    .map((dimensions) => dimensions.reduce((a, b) => a * b) +
-      dimensions.sort((a, b) => a - b).slice(0, 2).reduce((a, b) => 2 * (a + b)))
+    .map((dimensions) => dimensions.reduce((a, b) => a * b)
+      + dimensions.sort((a, b) => a - b).slice(0, 2).reduce((a, b) => 2 * (a + b)))
     .reduce((a, b) => a + b)
 
   report(result, 3812909)

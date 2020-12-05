@@ -15,19 +15,21 @@ const getSourceFileList = (dir = src) => fs.readdirSync(dir)
   .filter((file) => dayPattern.test(file))
 const requiredArg = () => {throw new Error('')}
 const readInput = (dir = src, name = requiredArg()) => fs
-  .readFileSync(path.resolve(dir, name + '.input'), 'utf8')
+  .readFileSync(path.resolve(dir, `${name}.input`), 'utf8')
   .trim()
 
 function reload (...args) {
+  // eslint-disable-next-line import/no-dynamic-require, global-require
+  const rerequire = (str) => require(str)
   const rel = path.resolve(...args)
 
   delete require.cache[rel]
 
   if (args[0] === lib) {
-    dependencies[path.parse(rel).name] = require(rel)
+    dependencies[path.parse(rel).name] = rerequire(rel)
   }
 
-  return require(rel)
+  return rerequire(rel)
 }
 
 function runner (dir, files, isDependency = false) {

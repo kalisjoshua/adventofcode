@@ -18,23 +18,11 @@ function partOne (input, report) {
 
 function partTwo (input, report) {
   const result = input
-    .reduce((acc, first, fIndex, fList) => {
-      if (acc) {
-        return acc
-      } else {
-        return fList.slice(fIndex + 1)
-          .reduce((acc, second, sIndex, sList) => {
-            if (acc) {
-              return acc
-            } else {
-              return sList.slice(sIndex + 1)
-                .reduce((acc, third) => 2020 === (first + second + third)
-                  ? [first, second, third]
-                  : acc, false)
-            }
-          }, false)
-      }
-    }, false)
+    .reduce((acc0, first, fIndex, fList) => acc0 || fList.slice(fIndex + 1)
+      .reduce((acc1, second, sIndex, sList) => acc1 || sList.slice(sIndex + 1)
+        .reduce((acc2, third) => ((first + second + third) === 2020
+          ? [first, second, third]
+          : acc2), false), false), false)
     .reduce((a, b) => a * b)
 
   report(result, 51810360)

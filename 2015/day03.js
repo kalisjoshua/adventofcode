@@ -15,6 +15,7 @@ function move ([grid, x, y], vector) {
     case '>': x += 1; break
     case '^': y += 1; break
     case 'v': y -= 1; break
+    default: break
   }
 
   const key = [x, y].join(',')
@@ -35,12 +36,11 @@ function partOne (input, report) {
 
 function partTwo (input, report) {
   const [[santa], [robo]] = input
-    .reduce(([santa, robo], vector, index) => {
-
-      return index % 2
-        ? [santa, move(robo, vector)]
-        : [move(santa, vector), robo]
-    }, [[{'0,0': 1}, 0, 0], [{'0,0': 1}, 0, 0]])
+    .reduce(([iSanta, iRobo], vector, index) => (
+      index % 2
+        ? [iSanta, move(iRobo, vector)]
+        : [move(iSanta, vector), iRobo]
+    ), [[{'0,0': 1}, 0, 0], [{'0,0': 1}, 0, 0]])
 
   const result = new Set([
     ...Reflect.ownKeys(santa),

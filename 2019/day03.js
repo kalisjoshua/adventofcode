@@ -6,7 +6,7 @@ function main (input, {range, report, trace}) {
           U62,R66,U55,R34,D71,R55,D58,R83`.split(/\n/).map((s) => s.trim()),
     full: input
       .trim()
-      .split("\n")
+      .split('\n'),
   }
 
   const op = {
@@ -18,11 +18,10 @@ function main (input, {range, report, trace}) {
 
   function walk (accAll, all) {
     const movement = all
-      .split(",")
-      // a.slice(-1)[0] - start from the last point and continue "moving"
-      .reduce((a, m) => [...a, ...wire(a.slice(-1)[0], m)], [[0,0]])
+      .split(',')
+      .reduce((a, m) => [...a, ...wire(a.slice(-1)[0], m)], [[0, 0]])
 
-    trace("Walk")
+    trace('Walk')
 
     return [...accAll, movement]
   }
@@ -36,25 +35,28 @@ function main (input, {range, report, trace}) {
       .map(op[direction.toUpperCase()](start.map(Number)))
   }
 
-  trace("Begin")
+  trace('Begin')
 
-  const wires = input["full"]
+  const wires = input.full
     .reduce(walk, [])
-    // convert points notation from array ([x, y]) to string ("x,y")
+    // convert points notation from array ([x, y]) to string ('x,y')
     .reduce((a, g) => [...a, g.slice(1).map((p) => p.join())], [])
 
-  trace("Grid")
+  trace('Grid')
 
   const intersections = wires
-    // cheaty, comma operator use :)
-    .reduce((a, b) => (b = new Set(b), a.filter((v) => b.has(v))))
+    .reduce((a, b) => {
+      b = new Set(b)
 
-  trace("Intersections")
+      return a.filter((v) => b.has(v))
+    })
+
+  trace('Intersections')
 
   const distances = intersections
-    .map((s) => s.split(",").reduce((a, b) => Math.abs(a) + Math.abs(b)))
+    .map((s) => s.split(',').reduce((a, b) => Math.abs(a) + Math.abs(b)))
 
-  trace("Distances")
+  trace('Distances')
 
   const shortestPath = intersections
     .map((point) => wires.map((w) => w.indexOf(point)).reduce((a, b) => +a + +b))
@@ -62,9 +64,9 @@ function main (input, {range, report, trace}) {
     // plus two because; 1) it's an index, and 2) it doesn't count the origin
     .shift() + 2
 
-  trace("Shortest")
+  trace('Shortest')
 
-  report('Part one', Math.min.apply(Math, distances), 280)
+  report('Part one', Math.min(...distances), 280)
   report('Part two', shortestPath, 10554)
 }
 

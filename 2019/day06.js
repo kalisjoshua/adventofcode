@@ -4,10 +4,10 @@ function main (input, {report}) {
 
   // key orbits value
   const directOrbitsMap = input
-    .map((orbit) => orbit.split(")"))
-    .reduce((acc, [a, b]) => (acc[b] = a, acc), {})
+    .map((orbit) => orbit.split(')'))
+    .reduce((acc, [a, b]) => ({...acc, [b]: a}), {})
 
-  const countOrbits = (orbiter) => 1 + (directOrbitsMap[orbiter] === "COM"
+  const countOrbits = (orbiter) => 1 + (directOrbitsMap[orbiter] === 'COM'
     ? 0
     : countOrbits(directOrbitsMap[orbiter]))
 
@@ -15,29 +15,25 @@ function main (input, {report}) {
     .map(countOrbits)
     .reduce((a, b) => a + b)
 
-  const follow = (orbit, acc = []) => directOrbitsMap[orbit] === "COM"
-    ? [orbit, ...acc]
-    : [orbit, ...follow(directOrbitsMap[orbit], acc)]
+  const follow = (orbit, acc = []) => (
+    directOrbitsMap[orbit] === 'COM'
+      ? [orbit, ...acc]
+      : [orbit, ...follow(directOrbitsMap[orbit], acc)]
+  )
 
   const [SAN, YOU] = [
     new Set(follow(directOrbitsMap.SAN).reverse()),
     new Set(follow(directOrbitsMap.YOU).reverse()),
   ]
 
-  const transfers = (function () {
-    let all = new Set([
-      ...Array.from(SAN.values()),
-      ...Array.from(YOU.values()),
-    ])
+  const all = new Set([
+    ...Array.from(SAN.values()),
+    ...Array.from(YOU.values()),
+  ])
 
-    for (const el of all) {
-      if (SAN.has(el) && YOU.has(el)) {
-        all.delete(el)
-      }
-    }
-
-    return all.size
-  }())
+  const transfers = Array.from(all)
+    .filter((el) => !(SAN.has(el) && YOU.has(el)))
+    .length
 
   report('Part one', checksum, 241064)
   report('Part two', transfers, 418)

@@ -18,15 +18,14 @@ function partOne (input, report) {
 
 function partTwo (input, report) {
   const result = input
-    .reduce(([acc, pos], paren) => {
-
-      return acc < 0
+    .reduce(([acc, pos], paren) => (
+      acc < 0
         ? [acc, pos]
         : [
           acc + (paren === '(' ? 1 : -1),
-          pos += 1,
+          pos + 1,
         ]
-    }, [0, 0])
+    ), [0, 0])
     .pop()
 
   report(result, 1797)

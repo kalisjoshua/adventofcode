@@ -3,7 +3,6 @@ function main (input, {report}) {
     .match(/\d+/g)
 
   partOne(input, (...args) => report('Part one', ...args))
-  // partTwo(input, (...args) => report('Part two', ...args))
 }
 
 function fuel (mass) {

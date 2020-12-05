@@ -1,5 +1,4 @@
-delete require.cache["./computor.js"]
-const computor = require("./computor.js")
+const computor = require('./computor.js')
 
 function main (input, {permute, pipeline, range, report}) {
   function phaseSetting (phases, memory) {
@@ -30,15 +29,15 @@ function main (input, {permute, pipeline, range, report}) {
 
   function run (program, rangeShift = 0) {
     program = program
-      .split(",")
+      .split(',')
 
-    const maxThrusterOutput = pipeline(
+    const maxThrusterOutput = pipeline(...[
       range(5, rangeShift),
       permute,
       Array.from,
       (permutations) => permutations.map((phases) => phaseSetting(phases, program)),
-      (outputs) => Math.max.apply(null, outputs)
-    )
+      (outputs) => Math.max.apply(null, outputs),
+    ])
 
     return maxThrusterOutput
   }

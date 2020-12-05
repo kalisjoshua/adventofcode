@@ -9,13 +9,15 @@ function main (input, libs) {
 }
 
 function partOne (input, report) {
+  const result = input
 
-  // report(result)
+  report(result)
 }
 
 function partTwo (input, report) {
+  const result = input
 
-  // report(result)
+  report(result)
 }
 
 module.exports = main

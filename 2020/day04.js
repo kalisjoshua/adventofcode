@@ -3,10 +3,12 @@ const parseInputLines = ([current, ...rest], line) => (
     ? [`${current} ${line}`.trim(), ...rest]
     : ['', current, ...rest]
 )
-const parseProperties = (line) => line
-  .match(/...:[^\s]+/g)
-  .map((str) => str.split(':'))
-  .reduce((acc, [key, val]) => ({...acc, [key]: val}), {})
+const parseProperties = (line) => (
+  line
+    .match(/...:[^\s]+/g)
+    .map((str) => str.split(':'))
+    .reduce((acc, [key, val]) => ({...acc, [key]: val}), {})
+)
 
 const required = [
   'byr',

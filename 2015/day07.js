@@ -11,13 +11,13 @@ function main (input, libs) {
 function partOne (input, report) {
   // const result = input
 
-  report('Let the fun begin')
+  report()
 }
 
 function partTwo (input, report) {
   // const result = input
 
-  report('Let the fun begin')
+  report()
 }
 
 module.exports = main

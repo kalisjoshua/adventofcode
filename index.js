@@ -33,11 +33,25 @@ function runner (dir, file) {
   // eslint-disable-next-line no-console
   console.clear()
 
+  let nonDayFilter = () => true
+
   if (yearPattern.test(dir)) {
     // reset the current year to the most recently run day;
     // this will allow all days to be re-run for dependencies without requiring
     // stopping the program and restarting with a new current year
     [workingYear] = dir.match(yearPattern)
+
+    // for non-day file in year directory
+    if (file && !dayPattern.test(file)) {
+      const nonDayFile = path.resolve(dir, file)
+
+      reload(nonDayFile)
+
+      nonDayFilter = (filepath) => (
+        !require.cache[filepath] || require.cache[filepath].children
+          .find(({id}) => id === nonDayFile)
+      )
+    }
   } else {
     reload(path.resolve(dir, file), true)
 
@@ -45,13 +59,14 @@ function runner (dir, file) {
     file = undefined
   }
 
-  const filesToRun = !file
+  const filesToRun = !file || !dayPattern.test(file)
     // no file specified, run them all
     ? fs.readdirSync(dir).filter(dayFilter)
     : [`${file.match(dayPattern).slice(1)}.js`]
 
   filesToRun
     .map((filename) => path.join(dir, filename))
+    .filter(nonDayFilter)
     .forEach((day) => {
       const {name} = path.parse(day)
 
@@ -60,7 +75,9 @@ function runner (dir, file) {
       dependencies.log(bars[1])
 
       try {
-        reload(path.resolve(dir, day))(readInput(dir, name), dependencies)
+        const dayModule = reload(path.resolve(dir, day))
+
+        dayModule(readInput(dir, name), dependencies)
       } catch (e) {
         dependencies.log.warn("Whooops, something didn't go right.")
         dependencies.log.error(e)

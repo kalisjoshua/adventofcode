@@ -1,6 +1,4 @@
-(function reload (module, {watch}) {
-  watch(module, () => {delete require.cache[module]})
-}(require('path').resolve(__dirname, 'computor.js'), require('fs')))
+require('../lib/selfReload.js')(__dirname, 'computor.js')
 
 function computor (memory, offset = 0, log = []) {
   memory = memory.base === undefined

@@ -1,12 +1,10 @@
-const parseInputLines = ([current, ...rest], line) => (
-  line.trim()
-    ? [current.concat(line.trim()), ...rest]
-    : [[], current, ...rest]
-)
-const split = (str) => str.split('')
-const sum = (a, b) => a + b
-
 function main (input, libs) {
+  const parseInputLines = ([current, ...rest], line) => (
+    line.trim()
+      ? [current.concat(line.trim()), ...rest]
+      : [[], current, ...rest]
+  )
+
   input = input
     .trim()
     .split(/\n/)
@@ -20,8 +18,8 @@ function main (input, libs) {
 
 function partOne (input, report) {
   const result = input
-    .map((group) => (new Set(group.flatMap(split)).size))
-    .reduce(sum)
+    .map((group) => (new Set(group.flatMap((str) => str.split(''))).size))
+    .reduce((a, b) => a + b)
 
   report(result, 6748)
 }
@@ -29,7 +27,7 @@ function partOne (input, report) {
 function partTwo (input, report) {
   const result = input
     .map((group) => {
-      const all = new Set(group.flatMap(split))
+      const all = new Set(group.flatMap((str) => str.split('')))
 
       // eslint-disable-next-line no-restricted-syntax
       for (const q of all) {
@@ -40,7 +38,7 @@ function partTwo (input, report) {
 
       return all.size
     })
-    .reduce(sum)
+    .reduce((a, b) => a + b)
 
   report(result, 3445)
 }

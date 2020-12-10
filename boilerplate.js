@@ -1,5 +1,11 @@
+const cleanInput = (input) => input
+  .trim()
+  .split(/\n/)
+  // .map(Number)
+  // .sort((a, b) => a - b)
+
 function main (input, libs) {
-  // input = input
+  input = cleanInput(input)
 
   main.libs = libs
 

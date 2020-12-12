@@ -18,11 +18,7 @@ function main (input, libs) {
 function partOne (input, report) {
   const jolts = input
     .reduce((diffs, num, index, all) => {
-      const joltDiff = index > 0
-        ? num - all[index - 1]
-        : num
-
-      diffs[joltDiff] += 1
+      diffs[!index ? num : num - all[index - 1]] += 1
 
       return diffs
     }, [0, 0, 0, 0])
@@ -32,11 +28,7 @@ function partOne (input, report) {
 }
 
 function partTwo (input, report) {
-  const diffs = (acc, num, index, all) => (
-    !index
-      ? [num]
-      : acc.concat(num - all[index - 1])
-  )
+  const diffs = (acc, num, i, all) => (!i ? [num] : [...acc, num - all[i - 1]])
   const pseudoTribonacci = [1, 2, 4, 7]
   const result = input
     .reduce(diffs, [])

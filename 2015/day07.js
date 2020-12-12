@@ -1,6 +1,7 @@
 function main (input, libs) {
   input = input
-    .split(/\n/)
+    .trim()
+    // .split(/\n/)
 
   main.libs = libs
 
@@ -9,9 +10,44 @@ function main (input, libs) {
 }
 
 function partOne (input, report) {
-  // const result = input
+  const rSignal = /^([^\s]+)?(?:\s*(AND|OR|(?:L|R)SHIFT|NOT)\s+([^\s]+))?\s+->\s+([^\s]+)$/
+  const result = input
+    .match(/-> a/)
+    // .reduce((output, line) => {
+    //   const [a, op, b, wire] = line.match(rSignal).slice(1)
+    //   let signal
+    //
+    //   switch (op) {
+    //     case 'AND':
+    //       // eslint-disable-next-line no-bitwise
+    //       signal = (output[a] || a) & (output[b] || b)
+    //       break
+    //     case 'OR':
+    //       // eslint-disable-next-line no-bitwise
+    //       signal = (output[a] || a) | (output[b] || b)
+    //       break
+    //     case 'LSHIFT':
+    //       // eslint-disable-next-line no-bitwise
+    //       signal = (output[a] || a) << (output[b] || b)
+    //       break
+    //     case 'RSHIFT':
+    //       // eslint-disable-next-line no-bitwise
+    //       signal = (output[a] || a) >> (output[b] || b)
+    //       break
+    //     case 'NOT':
+    //       // eslint-disable-next-line no-bitwise
+    //       signal = 2 ** 16 + ~(output[b] || b)
+    //       break
+    //     default:
+    //       signal = output[a] || a
+    //   }
+    //
+    //   output[wire] = signal
+    //
+    //   return output
+    // }, {})
 
-  report()
+  report(result)
 }
 
 function partTwo (input, report) {

@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const {performance} = require('perf_hooks')
 
 const allYears = fs.readdirSync('.')
   .filter((file) => file.match(/^\d{4}$/))
@@ -36,7 +37,7 @@ function runner (dir, file) {
   let nonDayFilter = () => true
 
   if (yearPattern.test(dir)) {
-    // reset the current year to the most recently run day;
+    // reset the current year to the most recently run day's year;
     // this will allow all days to be re-run for dependencies without requiring
     // stopping the program and restarting with a new current year
     [workingYear] = dir.match(yearPattern)
@@ -47,21 +48,26 @@ function runner (dir, file) {
 
       reload(nonDayFile)
 
+      // filters for files that have the edited/saved file as a dependency
       nonDayFilter = (filepath) => (
         !require.cache[filepath] || require.cache[filepath].children
           .find(({id}) => id === nonDayFile)
       )
     }
   } else {
+    // reload library file and update the dependencies object
     reload(path.resolve(dir, file), true)
 
+    // reset to the current workingYear so that files can be run
     dir = path.resolve(workingYear)
+    // no specific day was changed/saved so run them all
     file = undefined
   }
 
   const filesToRun = !file || !dayPattern.test(file)
     // no file specified, run them all
     ? fs.readdirSync(dir).filter(dayFilter)
+    // run a specific file only
     : [`${file.match(dayPattern).slice(1)}.js`]
 
   filesToRun
@@ -76,24 +82,32 @@ function runner (dir, file) {
 
       try {
         const dayModule = reload(path.resolve(dir, day))
+        const start = performance.now()
 
         dayModule(readInput(dir, name), dependencies)
+        const end = performance.now()
+
+        dependencies.log(bars[1])
+        dependencies.log('Took:', dependencies.runtimeFormat(end - start))
       } catch (e) {
         dependencies.log.warn("Whooops, something didn't go right.")
         dependencies.log.error(e)
       }
 
-      dependencies.log()
+      dependencies.log('') // add an empty line to the output
     })
 }
 
 const lib = path.resolve('lib')
 
+// load all library files as dependencies and make them available for solutions
 fs.readdirSync(lib)
   .forEach((file) => reload(path.resolve(lib, file), true))
 
+// watch for file changes in the library files and update them when saved
 fs.watch(lib, (event, file) => runner(path.resolve(lib), file))
 
+// watch all days for all years and re-run days that are being edited
 allYears
   .forEach((year) => {
     const dir = path.resolve(year)
@@ -101,4 +115,5 @@ allYears
     fs.watch(dir, (event, file) => runner(path.resolve(dir), file))
   })
 
+// initially run the selected years days
 runner(path.resolve(workingYear))

@@ -50,7 +50,7 @@ function partOne (input, report) {
         : memory.reduce((a, b) => a + b)
     }, {mask: '', memory: []})
 
-  report(result)
+  report(result, 8332632930672)
 }
 
 function partTwo (input, report) {

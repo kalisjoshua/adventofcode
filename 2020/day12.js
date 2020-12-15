@@ -2,21 +2,7 @@ const cleanInput = (input) => input
   .trim()
   .split(/\n/)
 
-const compass = (function fn (facing = 'E') {
-  return new Proxy({
-    turn: (degrees) => {
-      facing = 'NESW'[('NESW'.indexOf(facing) + (360 + degrees) / 90) % 4]
-    },
-  }, {get: (target, prop) => (prop === 'facing' ? facing : target[prop])})
-}())
-
 function main (input, libs) {
-//   input = `
-// F10
-// N3
-// F7
-// R90
-// F11`
   input = cleanInput(input)
 
   main.libs = libs
@@ -26,45 +12,77 @@ function main (input, libs) {
 }
 
 function partOne (input, report) {
-  const ferry = (function iife () {
-    let facing = 'E'
-    const coords = [0, 0]
+  let bearing = 'E'
+  const coords = [0, 0]
 
-    function turn (degrees) {
-      facing = 'NESW'[('NESW'.indexOf(facing) + (360 + degrees) / 90) % 4]
-    }
+  function rotate (value) {
+    bearing = 'NESW'[('NESW'.indexOf(bearing) + (360 + value) / 90) % 4]
+  }
 
-    return {
-      adjust: (inst) => {
-        const [action, value] = [inst[0], parseInt(inst.slice(1), 10)]
-        const axis = /[NS]/.test(facing) ? 0 : 1
-        const positive = /[NE]/.test(facing)
+  input
+    .forEach((line) => {
+      const [action, value] = [line[0], parseInt(line.slice(1), 10)]
 
-        switch (action) {
-          case 'F': coords[axis] += (positive ? value : -value); break
-          case 'L': turn(-value); break
-          case 'R': turn(+value); break
-          case 'N': coords[0] += value; break
-          case 'S': coords[0] -= value; break
-          case 'E': coords[1] += value; break
-          case 'W': coords[1] -= value; break
-          default: throw new Error(`Unrecognized action "${action}".`)
-        }
-      },
-      getDistance: () => Math.abs(coords[0]) + Math.abs(coords[1]),
-    }
-  }())
+      switch (action) {
+        case 'F':
+          coords[/[NS]/.test(bearing) ? 0 : 1] += /[NE]/.test(bearing)
+            ? value
+            : -value
+          break
+        case 'L': rotate(-value); break
+        case 'R': rotate(+value); break
+        case 'N': coords[0] += value; break
+        case 'S': coords[0] -= value; break
+        case 'E': coords[1] += value; break
+        case 'W': coords[1] -= value; break
+        default: throw new Error(`Unrecognized action "${action}".`)
+      }
 
-  input.forEach(ferry.adjust)
-  const result = ferry.getDistance()
+      return []
+    })
+
+  const result = Math.abs(coords[0]) + Math.abs(coords[1])
 
   report(result, 882)
 }
 
 function partTwo (input, report) {
-  // const result = input
+  let bearing = [1, 10]
+  const coords = [0, 0]
 
-  report()
+  function rotate (value) {
+    let turns = ((360 + value) / 90) % 4
+
+    while (turns) {
+      bearing = [-bearing[1], bearing[0]]
+      turns -= 1
+    }
+  }
+
+  input
+    .forEach((line) => {
+      const [action, value] = [line[0], parseInt(line.slice(1), 10)]
+
+      switch (action) {
+        case 'F':
+          coords[0] += bearing[0] * value
+          coords[1] += bearing[1] * value
+          break
+        case 'L': rotate(-value); break
+        case 'R': rotate(+value); break
+        case 'N': bearing[0] += value; break
+        case 'S': bearing[0] -= value; break
+        case 'E': bearing[1] += value; break
+        case 'W': bearing[1] -= value; break
+        default: throw new Error(`Unrecognized action "${action}".`)
+      }
+
+      return []
+    })
+
+  const result = Math.abs(coords[0]) + Math.abs(coords[1])
+
+  report(result, 28885)
 }
 
 module.exports = main

@@ -1,9 +1,6 @@
 const cleanInput = (input) => input
   .trim()
   .split(/\n/)
-  .reduce((acc, schedule) => [acc, ...schedule.split(',')])
-  .filter(Number)
-  .map(Number)
 
 function main (input, libs) {
   input = cleanInput(input)
@@ -16,6 +13,9 @@ function main (input, libs) {
 
 function partOne (input, report) {
   const [earliest, ...buses] = input
+    .reduce((acc, schedule) => [acc, ...schedule.split(',')])
+    .filter(Number)
+    .map(Number)
   const {result} = buses
     .reduce((acc, busID) => {
       const overtime = (1 + Math.floor(earliest / busID)) * busID - earliest
@@ -29,7 +29,7 @@ function partOne (input, report) {
       return acc
     }, {overtime: Number.MAX_SAFE_INTEGER})
 
-  report(result)
+  report(result, 104)
 }
 
 function partTwo (input, report) {

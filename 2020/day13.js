@@ -33,9 +33,52 @@ function partOne (input, report) {
 }
 
 function partTwo (input, report) {
-  // const result = input
+  const schedule = input.pop()
+    .split(',')
+    .reduce((acc, num, index) => (
+      num === 'x'
+        ? acc
+        : acc.concat([[BigInt(num), BigInt(index)]])
+    ), [])
 
-  report()
+  /* source https://github.com/matthewgehring/adventofcode/blob/main/2020/day13/script.js */
+  const gcd = (a, b) => (a === BigInt(0) ? b : gcd(b % a, a))
+  const modInverse = (a, m) => (gcd(a, m) ? power(a, m - BigInt(2), m) : undefined)
+
+  function magic (buses) {
+    const N = buses
+      .reduce((a, [b]) => a * b, BigInt(1))
+    const Ni = buses
+      .map(([d]) => N / d)
+    const diffs = buses
+      .map(([id, offset], i) => (i === 0 ? BigInt(0) : id - offset))
+    const x = buses
+      .map(([id], i) => modInverse(Ni[i], id))
+    const sum = Ni
+      .map((item, i) => item * diffs[i] * x[i])
+      .reduce((a, b) => a + b)
+
+    return sum - (sum / N) * N
+  }
+
+  function power (x, y, m) {
+    if (y === BigInt(0)) {
+      return BigInt(1)
+    }
+
+    let p = power(x, y / BigInt(2), m) % m
+
+    p = (p * p) % m
+
+    return y % BigInt(2) === BigInt(0)
+      ? p
+      : (x * p) % m
+  }
+  /* source https://github.com/matthewgehring/adventofcode/blob/main/2020/day13/script.js */
+
+  const result = parseInt(magic(schedule), 10)
+
+  report(result, 842186186521918)
 }
 
 module.exports = main

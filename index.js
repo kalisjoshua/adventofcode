@@ -88,7 +88,7 @@ function runner (dir, file) {
         const end = performance.now()
 
         dependencies.log(bars[1])
-        dependencies.log('Took:', dependencies.runtimeFormat(end - start))
+        dependencies.log(workingYear, '/', name, 'took:', dependencies.runtimeFormat(end - start))
       } catch (e) {
         dependencies.log.warn("Whooops, something didn't go right.")
         dependencies.log.error(e)

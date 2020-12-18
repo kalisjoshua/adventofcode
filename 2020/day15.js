@@ -75,32 +75,18 @@ function partTwo (input, report) {
   //
   // report(result)
   const stack = (function () {
-    let counter = 0
-    let next
-    const memo = new Map()
-
     return (limit, list) => {
-      while (counter < limit) {
-        if (list.length) {
-          next = list.shift()
-        } else {
-          next = memo.get(next) !== counter - 1
-            ? memo.get(next)
-            : 0
-        }
-        memo.set(next, counter)
-        // const memoized = (memo.get(next) || [])[1]
-        //
-        // next = list.shift() ?? memoized ?? 0
-        //
-        console.log(next, memo.get(next))
-        //
-        // const history = memo.get(next) || []
-        // // console.log(next, history)
-        // memo.set(next, history.concat(counter))
+      let counter = list.length
+      const memo = new Map()
+      let next = 0
 
+      list.forEach((num, index) => memo.set(num, index))
+      list.push(next)
+
+      do {
+        
         counter += 1
-      }
+      } while (counter < limit)
     }
   }())
 

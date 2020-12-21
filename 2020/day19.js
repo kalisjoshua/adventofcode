@@ -111,7 +111,7 @@ ba`)
 
     while (stack.length && !isValid) {
       const rule = stack.shift()
-      console.log(rule)
+      // console.log(rule)
 
       // isValid = rule
       //   .every((r, i) => (
@@ -128,12 +128,12 @@ ba`)
     return isValid
   }
 
-  console.log(input.rules)
+  // console.log(input.rules)
 
   const result = input.messages
     .filter((line) => parser(input.rules, line))
 
-  console.log(result)
+  // console.log(result)
 
   report()
 }

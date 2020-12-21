@@ -78,9 +78,9 @@ function partOne (input, report) {
   const topLeft = input
     .filter((grid) => /^(?:right|bottom){2}$/.test(Reflect.ownKeys(grid.connections).join('')))[0]
 
-  console.log(topLeft.id)
-  console.log(topLeft.connections.right.id)
-  console.log(topLeft.connections.right)
+  // console.log(topLeft.id)
+  // console.log(topLeft.connections.right.id)
+  // console.log(topLeft.connections.right)
 
   report()
 }

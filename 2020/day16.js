@@ -75,7 +75,7 @@ function partTwo (input, report) {
 // 5,14,9`)
   const {isValid, rules, tickets} = input
   const fields = Reflect.ownKeys(rules)
-  console.log(rules)
+  // console.log(rules)
 
   const validTickets = tickets
     .filter((ticket) => ticket.every(isValid))
@@ -88,7 +88,7 @@ function partTwo (input, report) {
     .forEach((row) => {
       const validation = row
         .map((col) => fields.filter((field) => rules[field](col)))
-      console.log(validation)
+      // console.log(validation)
     }, [])
   // const temp = fields
   //   .map((x, column) => {

@@ -68,7 +68,7 @@ mem[26] = 1`)
           }
         }, address)
 
-        console.log(floating)
+        // console.log(floating)
         floating
           .split('')
           .reduce((options, char) => (
@@ -77,13 +77,13 @@ mem[26] = 1`)
               : options.map((opt, count) => opt.replace(char, count % 2))
           ), Array(floating.match(/X/g).length * 2).fill(floating))
           .forEach((location) => {
-            console.log(location)
+            // console.log(location)
             memory[parseInt(location, 2)] = parseInt(value, 10)
           })
       }
 
       if (!all[index + 1]) {
-        console.log(memory)
+        // console.log(memory)
       }
 
       return all[index + 1]

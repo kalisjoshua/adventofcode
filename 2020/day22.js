@@ -40,46 +40,53 @@ function partOne (input, report) {
 }
 
 function partTwo (input, report) {
-  function combat ([one, two]) {
+  function combat ([one, two], game = 1) {
     let counter = 0
     const hands = [one.slice(0), two.slice(0)]
     const history = []
 
     function winner (i, cards) {
+      const shadow = cards.slice(0)
+
       if (i === 1) {
-        cards.reverse()
+        shadow.reverse()
       }
 
-      hands[i] = hands[i].concat(cards)
+      hands[i] = hands[i].concat(shadow)
     }
 
-    while (hands[0].length && hands[1].length && counter < 800) {
+    while (hands[0].length && hands[1].length && counter < 1250) {
       const state = hands.flat().join()
-      const cards = [
-        hands[0].shift(),
-        hands[1].shift(),
-      ]
-      console.log(`-- Round ${counter + 1} --`)
-      // console.log(`-- Round ${counter + 1} --\n`, {
-      //   'Player 1 deck': hands[0],
-      //   'Player 2 deck': hands[1],
-      //   'Player 1 plays': cards[0],
-      //   'Player 2 plays': cards[1],
-      // })
 
       if (history.find((round) => round === state)) {
-        return [1, 0]
+        return [[1], []]
       }
 
       history.push(state)
 
-      if (hands[0].length >= cards[0] && hands[1].length >= cards[1]) {
-        // console.log('recursing', [cards[0], hands[0].length, cards[1], hands[1].length])
-        const subGame = combat(hands)
+      const cards = [
+        hands[0].shift(),
+        hands[1].shift(),
+      ]
+      // console.log(`-- Round ${counter + 1} --`)
+      console.log(`-- Round ${counter + 1} (Game ${game}) --\n`, {
+        'Player 1 deck': hands[0],
+        'Player 2 deck': hands[1],
+        'Player 1 plays': cards[0],
+        'Player 2 plays': cards[1],
+      })
 
-        winner(subGame[0] > subGame[1] ? 0 : 1, cards)
+      if (hands[0].length >= cards[0] && hands[1].length >= cards[1]) {
+        const subGame = combat(hands, game + 1)
+        // console.log('recursing', subGame)
+
+        winner(subGame[0].length > subGame[1].length ? 0 : 1, cards)
       } else {
         winner(cards[0] > cards[1] ? 0 : 1, cards)
+
+        if (hands[0].length === 0 || hands[1].length === 0) {
+          return hands
+        }
       }
 
       counter += 1

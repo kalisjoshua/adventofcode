@@ -7,6 +7,7 @@
     "2015": "npm start -- 2015",
     "2019": "npm start -- 2019",
     "2020": "npm start -- 2020",
+    "2021": "npm start -- 2021",
     "lint": "eslint .",
     "start": "node index.js"
   },

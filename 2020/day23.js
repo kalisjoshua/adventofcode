@@ -13,26 +13,45 @@ function main (input, libs) {
 }
 
 function partOne (input, report) {
-  let circle = input.slice(0)
+  input = cleanInput('389125467')
+  let cups = input.slice(0)
 
-  const current = circle[0]
-  const three = circle.slice(1, 4)
-  const remaining = circle.slice(4)
-  const destination = remaining
-    .filter((cup) => cup < current)
-    .sort((a, b) => a - b)
-    .pop() || Math.max(...remaining)
-  // circle = [current]
-  //   .concat(remaining.splice(remaining.indexOf(destination), 0, ...three))
-  console.log(remaining)
-  remaining
-    .splice(1 + remaining.indexOf(destination), 0, ...three)
-  console.log(remaining)
-  console.log(destination)
-  console.log(remaining.indexOf(destination))
-  console.log(three)
+  function rotate (circle, index) {
+    const len = circle.length
+    const selected = index % len
+    const selectedPlusThree = (selected + 3) % len
+    const current = circle[selected]
+    const three = circle.slice((selected + 1) % len, selectedPlusThree)
+    const remaining = circle.slice(selectedPlusThree)
+    const destination = remaining
+      .filter((cup) => cup < current)
+      .sort((a, b) => a - b)
+      .pop() || Math.max(...remaining)
+    // console.log(`-- move ${index + 1} --`)
+    // console.log(`cups: ${circle.join(' ')}`)
+    // console.log(`pick ups: ${three.join(' ')}`)
+    // console.log(`destination: ${destination}`)
+    // console.log('')
+    remaining
+      .splice(1 + remaining.indexOf(destination), 0, ...three)
+    remaining
+      .unshift(current)
+    // console.log(remaining.join(' '))
 
-  report()
+    return remaining.slice(0)
+  }
+
+  let counter = 0
+
+  while (counter < 10) {
+    console.log(cups.join(' '))
+    cups = rotate(cups, counter)
+    counter += 1
+  }
+
+  const result = cups.join('')
+
+  report(result)
 }
 
 function partTwo (input, report) {

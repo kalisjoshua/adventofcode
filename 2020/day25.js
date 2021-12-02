@@ -12,7 +12,6 @@ function main (input, libs) {
 }
 
 function partOne (input, report) {
-
   report()
 }
 

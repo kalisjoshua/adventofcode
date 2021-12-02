@@ -69,12 +69,12 @@ function partTwo (input, report) {
         hands[1].shift(),
       ]
       // console.log(`-- Round ${counter + 1} --`)
-      console.log(`-- Round ${counter + 1} (Game ${game}) --\n`, {
-        'Player 1 deck': hands[0],
-        'Player 2 deck': hands[1],
-        'Player 1 plays': cards[0],
-        'Player 2 plays': cards[1],
-      })
+      // console.log(`-- Round ${counter + 1} (Game ${game}) --\n`, {
+      //   'Player 1 deck': hands[0],
+      //   'Player 2 deck': hands[1],
+      //   'Player 1 plays': cards[0],
+      //   'Player 2 plays': cards[1],
+      // })
 
       if (hands[0].length >= cards[0] && hands[1].length >= cards[1]) {
         const subGame = combat(hands, game + 1)

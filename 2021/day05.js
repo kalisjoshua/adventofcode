@@ -61,16 +61,6 @@ module.exports = (input, {report}) => {
     .filter((count) => count > 1)
     .length
 
-  // for (let x = 0; x < 10; x++) {
-  //   let line = ""
-  //
-  //   for (let y = 0; y < 10; y++) {
-  //     line += fullGrid[`${y},${x}`] || "."
-  //   }
-  //
-  //   console.log(line)
-  // }
-
   report('Part one', partOne, 5145)
   report('Part two', partTwo)
 }

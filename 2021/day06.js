@@ -27,5 +27,5 @@ module.exports = (input, {report}) => {
   const partTwo = sourcedSolution(input, 256)
 
   report('Part one', partOne, 379414)
-  report('Part two', partTwo)
+  report('Part two', partTwo, 1705008653296)
 }

@@ -17,50 +17,45 @@ module.exports = (input, {report}) => {
     .split(/\n/)
     .map((line) => line.split(/\s*\|\s*/).map((str) => str.match(/[abcdefg]+/g)))
 
-  const digitsOnly = input
-    .map((line) => line.pop())
-  const notesOnly = input
-    .map(([notes]) => notes)
-
-  // const crossedWires = {
-  //   a: "d", //  aaaa    ==>    dddd
-  //   b: "e", // b    c   ==>   e    a
-  //   c: "a", // b    c   ==>   e    a
-  //   d: "f", //  dddd    ==>    ffff
-  //   e: "g", // e    f   ==>   g    b
-  //   f: "b", // e    f   ==>   g    b
-  //   g: "c", //  gggg    ==>    cccc
-  // }
-  const key = [
-    /^[cagedb]+$/,  // 0
-    /^[ab]+$/,      // 1
-    /^[gcdfa]+$/,   // 2
-    /^[fbcad]+$/,   // 3
-    /^[eafb]+$/,    // 4
-    /^[cdfbe]+$/,   // 5
-    /^[cdfgeb]+$/,  // 6
-    /^[dab]+$/,     // 7
-    /^[acedgfb]+$/, // 8
-    /^[cefabd]+$/,  // 9
-  ]
-  // digits:   0 1 2 3 4 5 6 7 8 9
-  // segments: 6 2 5 5 4 5 6 3 7 6
-  // unique:   _ ! _ _ ! _ _ ! ! _
   const uniques = [2, 3, 4, 7]
+  const isUnique = (str) => uniques.includes(str.length)
 
-  const translate = (str) => [].map.call(str, (letter) => crossedWires[letter])
-    .join("")
-
-  const partOne = digitsOnly
-    .map((digits) => digits.filter((str) => uniques.includes(str.length)).length)
+  const partOne = input
+    .map(([_, digits]) => digits.filter(isUnique).length)
     .reduce((a, b) => a + b)
 
   // const partTwo = digitsOnly
-  //   .map((quad) => quad
-  //     .map((str) => key
-  //       .reduce((found, pattern, index) => found || pattern
-  //         .exec(translate(str)) && index, false)))
 
   report('Part one', partOne, 274)
   // report('Part two', partTwo)
 }
+
+//   0:      1:      2:      3:      4:
+//  aaaa    ....    aaaa    aaaa    ....
+// b    c  .    c  .    c  .    c  b    c
+// b    c  .    c  .    c  .    c  b    c
+//  ....    ....    dddd    dddd    dddd
+// e    f  .    f  e    .  .    f  .    f
+// e    f  .    f  e    .  .    f  .    f
+//  gggg    ....    gggg    gggg    ....
+//
+//   5:      6:      7:      8:      9:
+//  aaaa    aaaa    aaaa    aaaa    aaaa
+// b    .  b    .  .    c  b    c  b    c
+// b    .  b    .  .    c  b    c  b    c
+//  dddd    dddd    ....    dddd    dddd
+// .    f  e    f  .    f  e    f  .    f
+// .    f  e    f  .    f  e    f  .    f
+//  gggg    gggg    ....    gggg    gggg
+
+// number | segments | lights  | unique
+//    0   |     6    | 1110111 |
+//    1   |     2    | 0010010 | Y
+//    2   |     5    | 1011101 |
+//    3   |     5    | 1011011 |
+//    4   |     4    | 0111010 | Y
+//    5   |     5    | 1101011 |
+//    6   |     6    | 1101111 |
+//    7   |     3    | 1010010 | Y
+//    8   |     7    | 1111111 | Y
+//    9   |     6    | 1111011 |

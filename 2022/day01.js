@@ -1,23 +1,31 @@
+const cleanRawInput = (raw) => raw
+  .trim()
+  .split(/\n\n+/)
+  .map((list) => sum(list.split(/\n+/).map((n) => parseInt(n, 10))))
+const sortFn = (a, b) => a - b
 const sum = (ar) => ar.reduce((a, b) => a + b, 0)
 
-module.exports = (input, {report}) => {
-  input = input
-    .trim()
-    .split(/\n\n+/)
-    .map((list) => sum(list.split(/\n+/).map((n) => parseInt(n, 10))))
+function partOne (input, report, answer) {
+  const result = Math.max(...input)
 
-  const partOneAnswer = 72511
-  const partOne = Math.max(...input)
+  report('Part one', result, answer)
+}
 
-  const partTwoAnswer = 212117
-  const sortFn = (a, b) => a - b
-  const size = 3
-  const partTwo = sum(input
-    .slice(size)
+function partTwo (input, report, answer) {
+  const SIZE = 3
+
+  const result = sum(input
+    .slice(SIZE)
     .reduce((acc, num) => (num > acc[0])
       ? acc.slice(1).concat(num).sort(sortFn)
-      : acc, input.slice(0, size).sort(sortFn)))
+      : acc, input.slice(0, SIZE).sort(sortFn)))
+  
+  report('Part one', result, answer)
+}
 
-  report('Part one', partOne, partOneAnswer)
-  report('Part two', partTwo, partTwoAnswer)
+module.exports = (raw, {report}) => {
+  const input = cleanRawInput(raw)
+
+  partOne(input, report, 72511)
+  partTwo(input, report, 212117)
 }

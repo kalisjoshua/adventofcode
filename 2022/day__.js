@@ -1,14 +1,20 @@
-const example = `
+const cleanRawInput = (raw) => raw
 
-`
+function partOne(input, report, answer) {
+  const result = input
 
-module.exports = (input, {report}) => {
-  input = input.trim().split(/\n/)
+  report('Part one', result, answer)
+}
 
-  const partOne = input
+function partTwo(input, report, answer) {
+  const result = input
 
-  const partTwo = input
+  report('Part one', result, answer)
+}
 
-  // report('Part one', partOne)
-  // report('Part two', partTwo)
+module.exports = (raw, { report }) => {
+  const input = cleanRawInput(raw)
+
+  partOne(input, report, null)
+  partTwo(input, report, null)
 }

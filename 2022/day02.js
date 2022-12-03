@@ -1,3 +1,4 @@
+const NOPE = Symbol('NOPE')
 const cleanRawInput = (raw) => raw
   .trim()
   .split(/\n/)
@@ -37,7 +38,7 @@ function partTwo(input, report, answer) {
   const result = input
     .reduce((acc, play) => acc + key[play], 0)
 
-  report('Part one', result, answer)
+  report('Part two', result, answer)
 }
 
 module.exports = (raw, { report }) => {

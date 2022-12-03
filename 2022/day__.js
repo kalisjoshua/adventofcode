@@ -1,3 +1,4 @@
+const NOPE = Symbol('NOPE')
 const cleanRawInput = (raw) => raw
 
 function partOne(input, report, answer) {
@@ -15,6 +16,6 @@ function partTwo(input, report, answer) {
 module.exports = (raw, { report }) => {
   const input = cleanRawInput(raw)
 
-  partOne(input, report, null)
-  partTwo(input, report, null)
+  partOne(input, report, NOPE)
+  partTwo(input, report, NOPE)
 }

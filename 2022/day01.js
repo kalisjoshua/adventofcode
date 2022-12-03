@@ -1,3 +1,4 @@
+const NOPE = Symbol('NOPE')
 const cleanRawInput = (raw) => raw
   .trim()
   .split(/\n\n+/)
@@ -19,8 +20,8 @@ function partTwo (input, report, answer) {
     .reduce((acc, num) => (num > acc[0])
       ? acc.slice(1).concat(num).sort(sortFn)
       : acc, input.slice(0, SIZE).sort(sortFn)))
-  
-  report('Part one', result, answer)
+
+  report('Part two', result, answer)
 }
 
 module.exports = (raw, {report}) => {

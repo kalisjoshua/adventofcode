@@ -1,5 +1,7 @@
 const NOPE = Symbol('NOPE')
 const cleanRawInput = (raw) => raw
+  .trim()
+  .split(/\n/)
 
 function partOne(input, report, answer) {
   const result = input
@@ -17,5 +19,5 @@ module.exports = (raw, { report }) => {
   const input = cleanRawInput(raw)
 
   partOne(input, report, NOPE)
-  partTwo(input, report, NOPE)
+  // partTwo(input, report, NOPE)
 }

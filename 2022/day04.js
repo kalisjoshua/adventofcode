@@ -22,7 +22,7 @@ function partTwo(input, report, answer) {
     ))
     .length
 
-  report('Part one', result, answer)
+  report('Part two', result, answer)
 }
 
 module.exports = (raw, { report }) => {

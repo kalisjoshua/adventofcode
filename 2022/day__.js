@@ -12,7 +12,7 @@ function partOne(input, report, answer) {
 function partTwo(input, report, answer) {
   const result = input
 
-  report('Part one', result, answer)
+  report('Part two', result, answer)
 }
 
 module.exports = (raw, { report }) => {

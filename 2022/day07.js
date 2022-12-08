@@ -35,7 +35,7 @@ function partTwo(input, report, answer) {
     .sort((a, b) => a[1] - b[1])
     [0]
 
-  report('Part one', result, answer)
+  report('Part two', result, answer)
 }
 
 function readLog (state, line) {

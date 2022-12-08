@@ -73,7 +73,7 @@ function partTwo(input, report, answer) {
     .map(([top]) => top)
     .join('')
 
-  report('Part one', result, answer)
+  report('Part two', result, answer)
 }
 
 module.exports = (raw, { report }) => {

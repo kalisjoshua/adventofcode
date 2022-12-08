@@ -27,7 +27,7 @@ function partTwo(input, report, answer) {
   const result = input
     .reduce(search(14), false)
 
-  report('Part one', result, answer)
+  report('Part two', result, answer)
 }
 
 module.exports = (raw, { report }) => {

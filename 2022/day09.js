@@ -3,45 +3,39 @@ const cleanRawInput = (raw) => raw
   .trim()
   .split(/\n/)
 
-function partOne(input, report, answer) {
-  const H = [[0, 0]]
-  const T = [[0, 0]]
+function solve (input, size) {
+  const LEAD = [[0, 0]]
+  const TAIL = Array(size).fill([[0, 0]])
 
   input.forEach((line) => {
     let [dir, dis] = line.split(' ')
 
-    dis = parseInt(dis, 10)
-
     while (dis--) {
-      const ref = H[0]
+      LEAD.unshift({
+        'U': [LEAD[0][0], LEAD[0][1] + 1],
+        'D': [LEAD[0][0], LEAD[0][1] - 1],
+        'L': [LEAD[0][0] - 1, LEAD[0][1]],
+        'R': [LEAD[0][0] + 1, LEAD[0][1]],
+      }[dir])
 
-      switch (dir) {
-        case 'U':
-          H.unshift([ref[0], ref[1] + 1])
-          break
-        case 'D':
-          H.unshift([ref[0], ref[1] - 1])
-          break
-        case 'L':
-          H.unshift([ref[0] - 1, ref[1]])
-          break
-        case 'R':
-          H.unshift([ref[0] + 1, ref[1]])
-          break
-      }
-
-      const diffX = Math.abs(H[0][0] - T[0][0])
-      const diffY = Math.abs(H[0][1] - T[0][1])
+      const diffX = Math.abs(LEAD[0][0] - TAIL[0][0][0])
+      const diffY = Math.abs(LEAD[0][1] - TAIL[0][0][1])
 
       if (diffX > 1 || diffY > 1) {
-        T.unshift(H.slice(1, 2)[0])
+        TAIL[0].unshift(LEAD.at(1))
       }
     }
   })
 
-  const result = Array
-    .from(new Set(T.map((p) => p.join())))
-    .length
+  return [LEAD, ...TAIL]
+}
+
+function partOne(input, report, answer) {
+  const tail = solve(input, 1)
+    .pop()
+    .map((p) => p.join())
+
+  const result = new Set(tail).size
 
   report('Part one', result, answer)
 }
@@ -64,5 +58,5 @@ L 5
 R 2`)
 
   partOne(input, report, 6087)
-  partTwo(example, report, NOPE)
+  // partTwo(example, report, NOPE)
 }

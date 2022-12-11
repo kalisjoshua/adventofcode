@@ -4,6 +4,7 @@ const cleanRawInput = (raw) => raw
   .split(/\n/)
   .reduce(collect, [])
   .map(configure)
+const toSource = (fn) => fn.toString().replace(/\n/g, '').replace('anonymous', '')
 
 function collect (barrel, line) {
   line = line.trim()
@@ -28,6 +29,7 @@ function configure ([items, op, test, ...pass], index) {
     items: items.split(/,\s*/).map(Number),
     op: new Function('old', op.replace('new =', 'return')),
     test: new Function('x', test.replace('divisible by', 'return 0 === x %')),
+    testNum: parseInt(test.match(/\d+$/)[0], 10),
     pass: pass.reverse().map((s) => parseInt(s.replace('throw to monkey ', ''), 10)),
   }
 
@@ -66,14 +68,41 @@ function partOne (input, report, answer) {
   report('Part one', result, answer)
 }
 
-function partTwo (input, report, answer) {
-  const result = 1
+function partTwo(input, report, answer) {
+  let counter = 10000
+  const limit = input
+    .reduce((acc, { testNum }) => acc * testNum, 1)
+
+  while (counter--) {
+    input.forEach((monkey, index) => {
+      const { items, op, test, pass } = monkey
+      const willPass = items.length
+
+      monkey.inspections = monkey.inspections || 0
+
+      items.forEach((worry) => {
+        const passing = op(worry)
+
+        monkey.inspections++
+        input[pass[+!!test(passing)]].items
+          .push(passing % limit)
+      })
+
+      monkey.items = monkey.items
+        .slice(willPass)
+    })
+  }
+
+  const [a, b] = input
+    .map(({ inspections }) => inspections)
+    .sort((a, b) => b - a)
+
+  const result = a * b
 
   report('Part two', result, answer)
 }
 
 module.exports = (raw, { report }) => {
-  const input = cleanRawInput(raw)
     const example = cleanRawInput(`
 Monkey 0:
   Starting items: 79, 98
@@ -103,6 +132,6 @@ Monkey 3:
     If true: throw to monkey 0
     If false: throw to monkey 1`)
 
-  partOne(input, report, 78678)
-  partTwo(example, report, NOPE)
+  partOne(cleanRawInput(raw), report, 78678)
+  partTwo(cleanRawInput(raw), report, 15333249714)
 }

@@ -37,6 +37,13 @@ function solve (input, size) {
     }
   })
 
+  const pos = [
+    LEAD[0],
+    ...TAIL.slice(0, -1).map(([h]) => h),
+    ...TAIL.at(-1),
+  ]
+
+  console.log(pos, TAIL.at(-1))
   print(TAIL.at(-1))
   return new Set(TAIL.at(-1).map((p) => p.join())).size
 }
@@ -48,7 +55,7 @@ function partOne(input, report, answer) {
 }
 
 function partTwo(input, report, answer) {
-  const result = solve(input, 9)
+  const result = solve(input, 4)
 
   report('Part two', result, answer)
 }
@@ -70,10 +77,10 @@ function print(path, char = '#') {
   const BORDER = 2
   let output = ''
 
-  for (let y = minY - BORDER; y <= maxY + BORDER; y++) {
+  for (let y = maxY + BORDER; y >= minY - BORDER; y--) {
     for (let x = minX - BORDER; x <= maxX + BORDER; x++) {
       if (x === 0 && y === 0) {
-        output += ' x'
+        output += ' S'
       } else if ([x, y] in lookup) {
         output += ' ' + char
       } else {
@@ -89,20 +96,18 @@ function print(path, char = '#') {
 
 module.exports = (raw, { report }) => {
   const input = cleanRawInput(raw)
-  const example = cleanRawInput(`R 5
-U 8
-L 8
-D 3
-R 17
-D 10
-L 25
-U 20`)
+//   const example = cleanRawInput(`R 5
+// U 8
+// L 8
+// D 3
+// R 17
+// D 10
+// L 25
+// U 20`)
   // const example = cleanRawInput(`U 22`)
-//   const example = cleanRawInput(`D 5
-// L 5
-// U 10
-// R 10
-// `)
+  const example = cleanRawInput(`R 5
+U 5
+`)
 
   // partOne(input, report, 6087)
   partTwo(example, report, NOPE)

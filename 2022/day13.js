@@ -42,6 +42,18 @@ function partOne (input, report, answer) {
 
 function partTwo (input, report, answer) {
   const result = input
+    .reduce((acc, [a, b]) => acc.concat([a, b]), [])
+    .concat([[[2]], [[6]]])
+    .filter((packet) => !/^10/.test(packet.join()))
+    .sort()
+    .map((packet, index) => {
+      const serialized = packet.join()
+
+      return serialized === '2' || serialized === '6'
+        ? index + 1
+        : 1
+    })
+    .reduce((a, b) => a * b)
 
   report('Part two', result, answer)
 }
@@ -73,5 +85,5 @@ module.exports = (raw, { report }) => {
 [1,[2,[3,[4,[5,6,0]]]],8,9]`)
 
   partOne(input, report, 4809)
-  // partTwo(input, report, NOPE)
+  partTwo(input, report, 22600)
 }

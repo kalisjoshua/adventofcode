@@ -7,7 +7,7 @@ const cleanRawInput = (raw) => raw
     delete grid.pos
 
     return line.reduce(createMap, grid)
-  }, {map: {'500,0': 'O'}})
+  }, {map: {}})
 
 function createMap (grid, [x, y]) {
   if (!grid.pos) {
@@ -63,16 +63,45 @@ function createMap (grid, [x, y]) {
   return grid
 }
 
-function display ({extent, map, origin}) {
+function display ({map}, asString = false) {
+  const origin = Object.keys(map)
+    .reduce((acc, point) => {
+      const coord = point.match(/\d+/g).map(Number)
+
+      if (coord[0] < acc[0]) acc[0] = coord[0]
+      if (coord[1] < acc[1]) acc[1] = coord[1]
+
+      return acc
+    }, [999999, 999999])
+  const extent = Object.keys(map)
+    .reduce((acc, point) => {
+      const coord = point.match(/\d+/g).map(Number)
+
+      if (coord[0] > acc[0]) acc[0] = coord[0]
+      if (coord[1] > acc[1]) acc[1] = coord[1]
+
+      return acc
+    }, [0, 0])
+
+  const bar = '='.repeat(extent[0] - origin[0] + 3) + '\n'
+  let output = bar
+
   for (let y = 0; y <= extent[1]; y++) {
     let row = ''
 
-    for (let x = origin[0]; x <= extent[0]; x++) {
+    for (let x = origin[0] - 1; x <= extent[0] + 1; x++) {
       row += map[[x, y]] || '.'
     }
 
-    // console.log(y, row)
-    console.log(y, row)
+    output += row + '\n'
+  }
+
+  output += bar
+
+  if (asString) {
+    return output
+  } else {
+    console.log(output)
   }
 }
 
@@ -93,7 +122,7 @@ function partOne(input, report, answer) {
     let landed = false
     let sand = [500, 0]
 
-    do {
+    while (!voidBreach && !landed) {
       const [x, y] = sand
       const down = [x, y + 1]
       const downLeft = [x - 1, y + 1]
@@ -114,16 +143,52 @@ function partOne(input, report, answer) {
         sandUnits++
         landed = true
       }
-    } while (!voidBreach && !landed)
+    }
   }
 
   report('Part one', sandUnits, answer)
 }
 
 function partTwo(input, report, answer) {
-  const result = input
+  const {extent, map} = input
 
-  report('Part two', result, answer)
+  let sandUnits = 0
+  const theVoid = extent[1] + 1
+
+  while (!(map[[500, 0]] || false)) {
+    let landed = false
+    let sand = [500, 0]
+
+    while (!landed) {
+      const [x, y] = sand
+      const down = [x, y + 1]
+      const downLeft = [x - 1, y + 1]
+      const downRight = [x + 1, y + 1]
+
+      if (y === theVoid) {
+        map[sand] = 'o'
+        sandUnits++
+        landed = true
+        continue
+      }
+
+
+      if (!map[down]) {
+        sand = down
+      } else if (!map[downLeft]) {
+        sand = downLeft
+      } else if (!map[downRight]) {
+        sand = downRight
+      } else {
+        map[sand] = 'o'
+        sandUnits++
+        landed = true
+      }
+    }
+  }
+  // require('fs').writeFileSync(__dirname + '/cave.txt', display(input, true), {encoding: 'UTF-8'})
+
+  report('Part one', sandUnits, answer)
 }
 
 module.exports = (raw, { report }) => {
@@ -132,5 +197,6 @@ module.exports = (raw, { report }) => {
 503,4 -> 502,4 -> 502,9 -> 494,9`)
 
   partOne(input, report, 901)
+  // 23688 - too low
   // partTwo(input, report, NOPE)
 }

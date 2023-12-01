@@ -4,19 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "2015": "npm start -- 2015",
-    "2019": "npm start -- 2019",
-    "2020": "npm start -- 2020",
-    "2021": "npm start -- 2021",
-    "lint": "eslint .",
-    "start": "node index.js"
+    "day": "touch ./$DAY.input ./$DAY.js",
+    "start": "DAY=./2023/day$DAY npm run day && npm test 2023",
+    "test": "node index.js"
   },
   "keywords": [],
   "author": "Joshua T Kalis <kalisjoshua@gmail.com> (http://kalisjoshua.me)",
   "license": "MIT",
-  "devDependencies": {
-    "eslint": "^8.29.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
-  }
+  "devDependencies": {}
 }

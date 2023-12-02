@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "day": "touch ./$DAY.input ./$DAY.js",
-    "start": "DAY=./2023/day$DAY npm run day && npm test 2023",
+    "start": ". ./next.sh",
+    "poststart": "npm test",
     "test": "node index.js"
   },
   "keywords": [],

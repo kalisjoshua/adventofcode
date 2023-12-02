@@ -1,9 +1,11 @@
 # Advent of Code
 
-- **Run the latest year**
-  - `npm test 2023`
 - **Start on a new day's challenge**
-  - `npm start 2023`
+  - `npm start` - _current year_
+  - `npm start 2019`
+- **Run tests without creating a new file**
+  - `npm test` - _current year_
+  - `npm test 2019`
 
 # License
 

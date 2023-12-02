@@ -1,9 +1,9 @@
 # Advent of Code
 
-## How to Run
-
-  1. `npm install`
-  2. `npm start`
+- **Run the latest year**
+  - `npm test`
+- **Start on a new day's challenge**
+  - `DAY=01 npm start`
 
 # License
 

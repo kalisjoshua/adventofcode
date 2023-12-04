@@ -1,17 +1,13 @@
 const NOPE = Symbol("NOPE");
 const cleanRawInput = (raw) => {
-  const size = raw.trim().split("\n").length + 2;
-  const row = Array(size).fill(".").join("");
+  const size = raw.trim().split("\n")[0].length;
+  const row = Array(size).fill(".").join("") + "\n";
 
-  return [
-    row,
-    raw
-      .trim()
-      .split("\n")
-      .map((line) => `.${line}.`)
-      .join("\n"),
-    row,
-  ].join("\n");
+  return `${row}${raw}\n${row}`
+    .split("\n")
+    .filter(Boolean)
+    .map((line) => `.${line}.`)
+    .join("\n");
 };
 
 const example = cleanRawInput(`
@@ -26,42 +22,73 @@ const example = cleanRawInput(`
 ...$.*....
 .664.598..`);
 
-function getPartsAndSymbols(schematic) {
-  const flat = schematic.replace(/\n/g, "");
-  const grid = schematic.split(/\n/);
+function getPartsPositions(source) {
+  const grid = source.split(/\n/);
+  const x = grid[0].length;
+  const y = (coord) => parseInt(coord / grid.length, 10);
 
-  const substr = (
+  const result = getPartsRecursive(source).map(([part, pos]) => [
     part,
-    mod,
-    col = flat.indexOf(part) % grid.length,
-    row = mod + parseInt(flat.indexOf(part) / grid.length, 10)
-  ) => grid[row].slice(Math.max(col - 1, 0), col + part.length + 1);
-
-  const result = schematic
-    .match(/\d+/g) // find all potential part numbers
-    .map((part) => [
-      parseInt(part, 10),
-      // capture their surrounding character strings
-      [substr(part, -1), substr(part, 0), substr(part, 1)]
-        .join("")
-        // reduce the string to only the symbols, if any
-        .replace(/[\.\d]/g, ""),
-    ]);
+    [-1, 0, 1]
+      .map((mod) =>
+        grid[mod + y(pos)].slice(
+          (pos % x) - 1,
+          (pos % x) + `${part}`.length + 1
+        )
+      )
+      .join(""),
+    [pos % x, y(pos)],
+  ]);
 
   return result;
 }
 
+function getPartsRecursive(source, result = []) {
+  const match = source.replace(/\n/g, "").match(/(\d+)/);
+
+  return !match
+    ? result
+    : getPartsRecursive(
+        source.replace(match[1], Array(match[1].length).fill("X").join("")),
+        result.concat([[+match[1], match.index]])
+      );
+}
+
+function getSymbolPosition(part, str, coord) {
+  const { length } = `${part}`;
+  const pos = str.indexOf("*");
+
+  return [
+    coord[0] + (pos % (length + 2)) - 1,
+    coord[1] + parseInt(pos / (length + 2), 10) - 1,
+  ];
+}
+
 function partOne(input, report, answer) {
-  const result = getPartsAndSymbols(input).reduce(
-    (acc, [part, symbol]) => (symbol.length === 1 ? acc + part : acc),
-    0
-  );
+  const result = getPartsPositions(input)
+    .map(([num, str]) => [num, str.replace(/[\.\d]/g, "")])
+    .reduce((acc, [part, { length }]) => (length === 1 ? acc + part : acc), 0);
 
   report("Part one", result, answer);
 }
 
 function partTwo(input, report, answer) {
-  const result = input;
+  const result = getPartsPositions(input)
+    .filter(([_, str]) => str.includes("*"))
+    .map((part) => part.concat([getSymbolPosition(...part)]))
+    .reduce(
+      ([sum, set], [num, _z, _x, pos]) => {
+        if (set[pos]) {
+          sum += set[pos] * num;
+        } else {
+          set[pos] = num;
+        }
+
+        return [sum, set];
+      },
+      [0, {}]
+    )
+    .at(0);
 
   report("Part two", result, answer);
 }
@@ -69,10 +96,6 @@ function partTwo(input, report, answer) {
 module.exports = (raw, { report }) => {
   const input = cleanRawInput(raw);
 
-  // 552188 too high
-  // 548923 no hint
-  // 550563 no hint
-  // 550174 too low
-  partOne(input, report, NOPE);
-  // partTwo(input, report, NOPE)
+  partOne(input, report, 550934);
+  partTwo(input, report, 81997870);
 };

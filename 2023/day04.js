@@ -31,7 +31,30 @@ function partOne(input, report, answer) {
 }
 
 function partTwo(input, report, answer) {
-  const result = example;
+  const result = input
+    .reduce(
+      ([sum, set], [win, num], index) => {
+        set[index] = 1 + (set[index] ?? 0);
+
+        let found = num.filter((n) => win.includes(n)).length;
+
+        while (set[index]) {
+          sum += 1;
+
+          let i = 0;
+
+          while (i++ < found) {
+            set[index + i] = 1 + (set[index + i] ?? 0);
+          }
+
+          set[index]--;
+        }
+
+        return [sum, set];
+      },
+      [0, {}]
+    )
+    .at(0);
 
   report("Part two", result, answer);
 }
@@ -40,5 +63,5 @@ module.exports = (raw, { report }) => {
   const input = cleanRawInput(raw);
 
   partOne(input, report, 21138);
-  partTwo(input, report, NOPE);
+  partTwo(input, report, 7185540);
 };

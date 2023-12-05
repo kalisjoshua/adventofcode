@@ -1,23 +1,23 @@
-const NOPE = Symbol('NOPE')
-const cleanRawInput = (raw) => raw
-  .trim()
-  .split(/\n/)
+const NOPE = Symbol("NOPE");
+const cleanRawInput = (raw) => raw.trim().split(/\n/);
+
+const example = ``;
 
 function partOne(input, report, answer) {
-  const result = input
+  const result = input;
 
-  report('Part one', result, answer)
+  report("Part one", result, answer);
 }
 
 function partTwo(input, report, answer) {
-  const result = input
+  const result = input;
 
-  report('Part two', result, answer)
+  report("Part two", result, answer);
 }
 
 module.exports = (raw, { report }) => {
-  const input = cleanRawInput(raw)
+  const input = cleanRawInput(raw);
 
-  partOne(input, report, NOPE)
+  partOne(input, report, NOPE);
   // partTwo(input, report, NOPE)
-}
+};

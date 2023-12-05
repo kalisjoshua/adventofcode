@@ -7,6 +7,11 @@
   - `npm test` - _current year_
   - `npm test 2019`
 
+# Notes
+
+- Use testing as a replacement for custom runner code
+-
+
 # License
 
 MIT License
